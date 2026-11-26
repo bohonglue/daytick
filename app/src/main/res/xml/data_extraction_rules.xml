@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 只允許「換新手機時直接傳輸」帶走資料，不上傳到 Google 雲端備份 -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="daytick.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="sharedpref" path="daytick.xml" />
+    </device-transfer>
+</data-extraction-rules>
