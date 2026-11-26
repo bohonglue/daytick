@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -38,9 +38,21 @@ jobs:
       - name: Rename APK
         run: |
           mkdir -p out
-          cp app/build/outputs/apk/release/*.apk out/DayTick-${{ github.run_number }}.apk
+          cp app/build/outputs/apk/release/*.apk out/DayTick.apk
 
       - uses: actions/upload-artifact@v4
         with:
           name: DayTick-apk
           path: out/*.apk
+
+      # 有正式金鑰時，發佈成 GitHub Release，手機瀏覽器免登入就能下載：
+      # https://github.com/<帳號>/daytick/releases/latest/download/DayTick.apk
+      - name: Publish release
+        if: env.DAYTICK_KEYSTORE_FILE != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v1.${{ github.run_number }}" out/DayTick.apk \
+            --title "日日打卡 v1.${{ github.run_number }}" \
+            --notes "下載 DayTick.apk 後在手機上點開安裝即可（可直接覆蓋舊版）。" \
+            --latest

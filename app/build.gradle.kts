@@ -12,8 +12,10 @@ android {
         applicationId = "app.daytick"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        // GitHub Actions 每次編譯的編號當版本號，新版才能覆蓋舊版
+        val buildNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
+        versionCode = buildNumber
+        versionName = "1.$buildNumber"
     }
 
     // 簽章金鑰不放在程式碼裡（repository 是公開的）。
