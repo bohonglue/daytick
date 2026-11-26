@@ -16,6 +16,9 @@ android {
         val buildNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
         versionCode = buildNumber
         versionName = "1.$buildNumber"
+        // App 內「檢查更新」要查詢的 GitHub repository
+        val repo = System.getenv("GITHUB_REPOSITORY") ?: "bohonglue/daytick"
+        buildConfigField("String", "UPDATE_REPO", "\"$repo\"")
     }
 
     // 簽章金鑰不放在程式碼裡（repository 是公開的）。
@@ -51,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

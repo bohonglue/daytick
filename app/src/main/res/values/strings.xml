@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">日日打卡</string>
+    <string name="app_name">日日待辦</string>
     <string name="widget_name">待辦清單</string>
     <string name="widget_desc">點圈圈直接完成待辦，不用打開 App</string>
 </resources>

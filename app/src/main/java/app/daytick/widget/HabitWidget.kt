@@ -74,7 +74,7 @@ class HabitWidget : GlanceAppWidget() {
 private fun WidgetContent(data: AppData, today: LocalDate) {
     val context = LocalContext.current
     // 未完成的排前面，完成的劃掉排在後面
-    val items = data.itemsFor(today).sortedBy { data.isDone(it, today) }
+    val items = data.itemsFor(today, today).sortedBy { data.isDone(it, today) }
     val doneCount = items.count { data.isDone(it, today) }
     val addIntent = Intent(context, MainActivity::class.java)
         .putExtra(MainActivity.EXTRA_ADD, true)

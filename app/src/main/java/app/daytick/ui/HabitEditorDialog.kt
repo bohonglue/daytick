@@ -64,6 +64,7 @@ private val WeekLabels = listOf("一", "二", "三", "四", "五", "六", "日")
 fun HabitEditorDialog(
     initial: Habit?,
     today: LocalDate,
+    defaultDate: LocalDate = today,
     onDismiss: () -> Unit,
     onSave: (Habit) -> Unit,
     onDelete: (Habit) -> Unit,
@@ -75,7 +76,7 @@ fun HabitEditorDialog(
     var section by remember { mutableStateOf(initial?.section ?: Section.ANYTIME) }
     var days by remember { mutableStateOf(initial?.days ?: Habit.ALL_DAYS) }
     var kind by remember { mutableStateOf(initial?.kind ?: Kind.TODO) }
-    var dueDate by remember { mutableStateOf(initial?.dueDate) }
+    var dueDate by remember { mutableStateOf(if (initial != null) initial.dueDate else defaultDate.takeIf { it != today }) }
     var pickingDate by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
 
@@ -221,7 +222,7 @@ fun HabitEditorDialog(
                             section = section,
                             days = days,
                             kind = kind,
-                            dueDate = if (kind == Kind.TODO) dueDate?.takeIf { it.isAfter(today) } else null,
+                            dueDate = if (kind == Kind.TODO) dueDate?.takeIf { it != today } else null,
                         ),
                     )
                 },

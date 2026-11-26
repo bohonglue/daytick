@@ -40,6 +40,27 @@ class HabitStore private constructor(private val app: Context) {
         data.copy(done = data.done + (habitId to newSet))
     }
 
+    /** 快速新增一個待辦到指定日期 */
+    fun quickAdd(name: String, date: LocalDate, today: LocalDate) {
+        val text = name.trim()
+        if (text.isEmpty()) return
+        upsert(
+            Habit(
+                id = newId(),
+                name = text,
+                emoji = "📝",
+                color = 0xFFFF7043,
+                kind = Kind.TODO,
+                dueDate = date.takeIf { it != today },
+            ),
+        )
+    }
+
+    /** 把待辦改到另一天 */
+    fun reschedule(habitId: String, date: LocalDate, today: LocalDate) = update { data ->
+        data.copy(habits = data.habits.map { if (it.id == habitId) it.copy(dueDate = date.takeIf { d -> d != today }) else it })
+    }
+
     /** 刪掉所有今天以前就完成的待辦 */
     fun clearFinishedTodos(today: LocalDate) = update { data ->
         val ids = data.finishedTodos(today).map { it.id }.toSet()

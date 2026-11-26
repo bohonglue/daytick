@@ -59,16 +59,19 @@ data class AppData(
     /**
      * 某一天要顯示的項目：
      * - 當天排定的例行事項
-     * - 日期已到（或已逾期）且還沒完成的待辦
-     * - 當天剛完成的待辦（劃掉顯示，隔天就收起來）
+     * - 當天完成的待辦
+     * - 還沒完成、日期是那一天的待辦；若是「今天」，也包含沒有日期和已逾期的
      */
-    fun itemsFor(date: LocalDate): List<Habit> = sortedHabits().filter { h ->
+    fun itemsFor(date: LocalDate, today: LocalDate = LocalDate.now()): List<Habit> = sortedHabits().filter { h ->
         if (!h.isTodo) {
             h.isScheduled(date)
         } else {
             val completed = completedOn(h)
-            if (completed != null) completed == date
-            else h.dueDate == null || !h.dueDate.isAfter(date)
+            when {
+                completed != null -> completed == date
+                date == today -> h.dueDate == null || !h.dueDate.isAfter(today)
+                else -> h.dueDate == date
+            }
         }
     }
 

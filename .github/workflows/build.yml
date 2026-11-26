@@ -52,7 +52,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # 更新內容 = 這次 commit 的說明（去掉署名行）
+          git log -1 --pretty=%B | grep -v -E '^(Co-Authored-By|Claude-Session):' > notes.txt
           gh release create "v1.${{ github.run_number }}" out/DayTick.apk \
-            --title "日日打卡 v1.${{ github.run_number }}" \
-            --notes "下載 DayTick.apk 後在手機上點開安裝即可（可直接覆蓋舊版）。" \
+            --title "日日待辦 v1.${{ github.run_number }}" \
+            --notes-file notes.txt \
             --latest
